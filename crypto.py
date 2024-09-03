@@ -43,7 +43,7 @@ def split(arr):
     array1 = arr[:int(len(arr)/2)]
     array2 = arr[int(len(arr)/2):]
     for i in range(int(len(arr)/2)):
-        arrs.append([array1[i], array2[i]])
+        arrs.append([int(array1[i]), int(array2[i])])
     return arrs
 
 
@@ -53,8 +53,8 @@ def encrypt(numsArray, key):
     # array2 = numsArray[int(len(numsArray)/2):]
     array1 = split(numsArray)
     matrix = np.matrix(array1, dtype=object)
-    encryptKey = np.matrix([[keys[0], keys[2]],
-                           [keys[1], keys[3]]], dtype=float)
+    encryptKey = np.matrix([[keys[0], keys[1]],
+                            [keys[2], keys[3]]], dtype=float)
     # print(np.matrix(array1))
     # print(np.matrix(encryptKey))
     encrypted = np.matrix_transpose(matrix@encryptKey)
@@ -66,8 +66,8 @@ def decrypt(message, key):
     dcryptKey = np.matrix([[keys[0], keys[2]],
                            [keys[1], keys[3]]], dtype=float)
     dcryptKey = np.linalg.inv(dcryptKey)
-    matrixMessage = split(message)
-    # print(np.matrix(matrixMessage))
+    matrixMessage = split(message.split(', '))
+    print(np.matrix(matrixMessage))
     return np.matrix_transpose(matrixMessage@dcryptKey)
 
 
@@ -78,6 +78,13 @@ def main():
             msg = input("Insira a mensagem; (somente minúsculas)\n")
             key = input("Insira a matriz chave; formato:11,12,21,22\n")
             print(encrypt(transcriptToNums(msg), key))
+        case 2:
+            msg = input(
+                "Insira a mensagem crptografada; 1, 2, 3, 4, 5, n, ...*COM ', '*\n")
+            key = input("Insira a matriz chave; formato:11,12,21,22\n")
+            decrypted = decrypt(msg, key)
+            print(decrypted)
+            print(transcriptToTxt(decrypted))
 
     # text = "quanta verdade seu espirito suporta"
     # text = "your lips my lips apocalypse"
